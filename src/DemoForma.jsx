@@ -34,7 +34,6 @@ const DemoForma = () => {
           role_id: roleId,
         },
       });
-      setUuid();
 
       const demoQuestion = data.find((el) => el.uuid == uuid).questions;
       setQuestions(demoQuestion);
