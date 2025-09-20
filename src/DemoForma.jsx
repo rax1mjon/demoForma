@@ -10,21 +10,21 @@ import {
   Typography,
 } from "antd";
 import React, { useEffect, useState } from "react";
-import { logo } from "../../../assets";
+import { logo } from "./assets";
 import { GithubFilled, PhoneOutlined, UserOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { requies } from "../../../server";
+import { requies } from "./server";
 const { Text, Title } = Typography;
 
 const DemoForma = () => {
   const { token } = theme.useToken();
-  const { username } = useSelector((state) => state.user);
-  const { roleId } = useSelector((state) => state.roleId);
+
   const [form] = Form.useForm();
 
   const [questions, setQuestions] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [uuid, setUuid] = useState(null);
+  const [username, SetUsername] = useState(null);
+  const [roleId, SetRoleId] = useState(null);
 
   const getAllForms = async () => {
     try {
@@ -34,9 +34,7 @@ const DemoForma = () => {
           role_id: roleId,
         },
       });
-      const uuidFromUrl = location.search.split("?")[1];
-      setUuid(uuidFromUrl);
-      console.log(uuid);
+      setUuid();
 
       const demoQuestion = data.find((el) => el.uuid == uuid).questions;
       setQuestions(demoQuestion);
@@ -49,8 +47,11 @@ const DemoForma = () => {
     }
   };
   useEffect(() => {
-    const id = location.search.split("?")[1];
-    setUuid(id);
+    const params = new URLSearchParams(location.search);
+
+    setUuid(params.get("uuid"));
+    SetUsername(params.get("username"));
+    SetRoleId(params.get("roleId"));
   }, []);
 
   useEffect(() => {
